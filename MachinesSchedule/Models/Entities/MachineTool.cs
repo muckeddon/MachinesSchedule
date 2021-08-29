@@ -32,18 +32,18 @@ namespace MachinesSchedule.Models.Entities
         {
             IsWork = true;
             List<(string, int)> mnT = new List<(string, int)>();
-            string FirstMetalForWork = fastestPairs.FirstOrDefault(r => r.Item1 == MachineName).Item2; //получаем металл с которым работает машина в приоритете
-            int time = Metals.FirstOrDefault(m => m.Key == FirstMetalForWork).Value; //получаем время за которое машина перерабатывает металл
+            string FirstMetalForWork = fastestPairs.FirstOrDefault(r => r.Item1 == MachineName).Item2;           //получаем металл с которым работает машина в приоритете
+            int time = Metals.FirstOrDefault(m => m.Key == FirstMetalForWork).Value;                             //получаем время за которое машина перерабатывает металл
             string MetalForWork = FirstMetalForWork;
 
             while (FullStop != true)
             {
-                if (availableMetals[MetalForWork] <= 0) //проверяем наличие металла с которым работает машина
+                if (availableMetals[MetalForWork] <= 0)                                                          //проверяем наличие металла с которым работает машина
                 {
                     IsWork = false;
                 }
 
-                if (IsWork == false) //проверяем работу машины, если она остановилась, то ищем следующий металл для работы
+                if (IsWork == false)                                                                            //проверяем работу машины, если она остановилась, то ищем следующий металл для работы
                 {
                     MetalForWork = Checker(FirstMetalForWork, fastestPairs, availableMetals);
                     if (MetalForWork != "None")
@@ -66,15 +66,15 @@ namespace MachinesSchedule.Models.Entities
         private string Checker(string metal, List<(string, string)> ready, Dictionary<string, int> availableMetals) //Возвращает металл который должна обрабатывать машина следующим после
                                                                                                                     //основного либо "None", если таковых нет
         {
-            var remainingMetals = (from m in Metals                                 //оставшиеся варианты металлов для обработки
+            var remainingMetals = (from m in Metals                                                                 //оставшиеся варианты металлов для обработки
                                    where m.Key != metal
                                    select m).ToList();
 
-            var nextMetal = (from rm in remainingMetals                             //металл с меньшим временем обратки из оставшихся
+            var nextMetal = (from rm in remainingMetals                                                              //металл с меньшим временем обратки из оставшихся
                              where rm.Value == remainingMetals.Min(m => m.Value)
                              select rm.Key).FirstOrDefault();
 
-            if (availableMetals[nextMetal] == 0 && nextMetal.Length > 1)            //проверка наличия металла в доступных
+            if (availableMetals[nextMetal] == 0 && nextMetal.Length > 1)                                             //проверка наличия металла в доступных
                 nextMetal = (from rm in remainingMetals
                              where rm.Key != nextMetal
                              select rm.Key).FirstOrDefault();
