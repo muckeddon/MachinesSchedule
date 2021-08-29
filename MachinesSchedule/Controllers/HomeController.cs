@@ -53,6 +53,13 @@ namespace MachinesSchedule.Controllers
                         {
                             if (model.Name == "Партии")
                             {
+                                if (_context.Shipment.ToList().Count != 0)//проверка на наличие Расписания в бд
+                                {
+                                    var itemsForDelete = _context.Set<Shipment>();
+                                    _context.Shipment.RemoveRange(itemsForDelete);
+                                    _context.SaveChanges();
+                                }
+
                                 Shipment shipment = new Shipment();
                                 shipment.ShipmentId = Convert.ToInt32(reader.GetValue(0));
                                 shipment.NomenclatureId = Convert.ToInt32(reader.GetValue(1));
@@ -60,6 +67,12 @@ namespace MachinesSchedule.Controllers
                             }
                             if (model.Name == "Номенклатуры")
                             {
+                                if (_context.Nomenclature.ToList().Count != 0)//проверка на наличие Расписания в бд
+                                {
+                                    var itemsForDelete = _context.Set<Nomenclature>();
+                                    _context.Nomenclature.RemoveRange(itemsForDelete);
+                                    _context.SaveChanges();
+                                }
                                 Nomenclature nomenclature = new Nomenclature();
                                 nomenclature.NomenclatureId = Convert.ToInt32(reader.GetValue(0));
                                 nomenclature.NomenclatureName = reader.GetValue(1).ToString();
@@ -67,6 +80,12 @@ namespace MachinesSchedule.Controllers
                             }
                             if (model.Name == "Оборудование")
                             {
+                                if (_context.MachineTools.ToList().Count != 0)//проверка на наличие Расписания в бд
+                                {
+                                    var itemsForDelete = _context.Set<MachineTool>();
+                                    _context.MachineTools.RemoveRange(itemsForDelete);
+                                    _context.SaveChanges();
+                                }
                                 MachineTool machineTools = new MachineTool();
                                 machineTools.MachineToolsId = Convert.ToInt32(reader.GetValue(0));
                                 machineTools.MachineName = reader.GetValue(1).ToString();
@@ -74,6 +93,12 @@ namespace MachinesSchedule.Controllers
                             }
                             if (model.Name == "Время")
                             {
+                                if (_context.Time.ToList().Count != 0)//проверка на наличие Расписания в бд
+                                {
+                                    var itemsForDelete = _context.Set<Time>();
+                                    _context.Time.RemoveRange(itemsForDelete);
+                                    _context.SaveChanges();
+                                }
                                 Time time = new Time();
                                 time.MachineToolId = Convert.ToInt32(reader.GetValue(0));
                                 time.NomenclatureId = Convert.ToInt32(reader.GetValue(1));
