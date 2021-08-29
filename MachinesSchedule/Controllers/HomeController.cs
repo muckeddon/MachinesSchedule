@@ -1,10 +1,14 @@
 ﻿using ExcelDataReader;
+using MachinesSchedule.Models;
 using MachinesSchedule.Models.DataAccessLayer;
 using MachinesSchedule.Models.Entities;
 using MachinesSchedule.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MachinesSchedule.Controllers
 {
@@ -91,9 +95,39 @@ namespace MachinesSchedule.Controllers
         }
         public IActionResult ScheduleCreator()
         {
+            List<MachineTool> machineTools = _context.MachineTools.ToList();
+            List<Time> times = _context.Time.ToList();
+            List<Nomenclature> nomenclatures = _context.Nomenclature.ToList();
+            List<Shipment> shipments = _context.Shipment.ToList();
+
+            foreach (var mt in machineTools)
+            {
+                Dictionary<string, int> Metals = new Dictionary<string, int>();
+                foreach (var t in times)
+                {
+                    foreach (var n in nomenclatures)
+                    {
+                        if (n.NomenclatureId == t.NomenclatureId && t.MachineToolId == mt.MachineToolsId)
+                            Metals.Add(n.NomenclatureName, t.OperationTime);
+                    }
+                }
+                mt.Metals = Metals;
+            }
+
+            MetalCounter metalCounter = new MetalCounter(_context);
+
+            List<(string, string)> fastestWay = metalCounter.FastestPairs(machineTools);
+            Dictionary<string, int> availableMetals = metalCounter.GetAllMetals(shipments, nomenclatures);
+
+            List<(string, int)> listlist = new List<(string, int)>();
+            List<(string, int)> listlist2 = new List<(string, int)>();
+            List<(string, int)> listlist3 = new List<(string, int)>();
+            Parallel.Invoke(() => listlist = machineTools[0].MachineToolStart(fastestWay, availableMetals),
+                () => listlist2 = machineTools[1].MachineToolStart(fastestWay, availableMetals),
+                () => listlist3 = machineTools[2].MachineToolStart(fastestWay, availableMetals));
+
             return View();
         }
-
 
     }
 }

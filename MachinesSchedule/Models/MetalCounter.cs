@@ -91,5 +91,19 @@ namespace MachinesSchedule.Models
 
             return result; //if(result.Count() == 3)
         }
+        public Dictionary<string, int> GetAllMetals(List<Shipment> shipments, List<Nomenclature> nomenclatures) //возвращает словарь с количеством каждого металла
+        {
+            Dictionary<string, int> metals = new Dictionary<string, int>();
+
+            foreach (var m in _context.Nomenclature.ToList())
+            {
+                int metalCount = (from s in shipments
+                                  where s.NomenclatureId == (nomenclatures.FirstOrDefault(n => n.NomenclatureName == m.NomenclatureName.ToString()).NomenclatureId)
+                                  select s).Count();
+                metals.Add(m.NomenclatureName.ToString(), metalCount);
+            }
+
+            return metals;
+        }
     }
 }
