@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
 
 namespace MachinesSchedule.Models.Entities
 {
@@ -15,5 +16,11 @@ namespace MachinesSchedule.Models.Entities
 
         [NotMapped]
         public Dictionary<string, int> Metals = new Dictionary<string, int>();
+        public string FastestJob() //возвращает название металла, который машина перерабатывает быстрее всего
+        {
+            return (from m in Metals
+                    where m.Value == (Metals.Min(met => met.Value))
+                    select m.Key).FirstOrDefault();
+        }
     }
 }
