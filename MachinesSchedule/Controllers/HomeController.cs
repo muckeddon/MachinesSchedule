@@ -84,5 +84,16 @@ namespace MachinesSchedule.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+        [HttpPost]
+        public IActionResult CreateSchedule()
+        {
+            return RedirectToAction("ScheduleCreator", "Home");
+        }
+        public IActionResult ScheduleCreator()
+        {
+            return View();
+        }
+
+
     }
 }

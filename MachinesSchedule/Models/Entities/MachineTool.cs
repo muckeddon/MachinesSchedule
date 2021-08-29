@@ -59,7 +59,7 @@ namespace MachinesSchedule.Models.Entities
                     availableMetals[MetalForWork] = availableMetals[MetalForWork] - 1;
                     mnT.Add((MetalForWork, time));
                 }
-                Thread.Sleep(time * 10);
+                Thread.Sleep(time * 2);
             }
             return mnT;
         }
