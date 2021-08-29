@@ -1,0 +1,22 @@
+﻿@model MachinesSchedule.ViewModels.ImportExcelViewModel
+<div>
+    <h4>Загрузка файлов Excel</h4>
+    <form asp-controller="Home" asp-action="ImportExcel" enctype="multipart/form-data" method="post">
+        <div>
+            <select size="3" multiple asp-for="Name">
+                <option disabled>Выберите документ</option>
+                <option value="Партии">Партии</option>
+                <option selected value="Номенклатуры">Номенклатуры</option>
+                <option value="Оборудование">Оборудование</option>
+                <option value="Время">Время</option>
+            </select>
+        </div>
+        <div>
+            <label asp-for="Document"></label><br />
+            <input type="file" name="Document" />
+        </div>
+        <div>
+            <button type="submit">Загрузить документ</button>
+        </div>
+    </form>
+</div>
