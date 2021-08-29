@@ -7,6 +7,7 @@ namespace MachinesSchedule.Models.Entities
 {
     public class MachineTool
     {
+        #region Properties
         public int Id { get; set; }
         public int MachineToolsId { get; set; }
         public string MachineName { get; set; }
@@ -17,6 +18,9 @@ namespace MachinesSchedule.Models.Entities
 
         [NotMapped]
         public Dictionary<string, int> Metals = new Dictionary<string, int>();
+        #endregion
+
+        #region Methods
         public string FastestJob() //возвращает название металла, который машина перерабатывает быстрее всего
         {
             return (from m in Metals
@@ -59,5 +63,29 @@ namespace MachinesSchedule.Models.Entities
             }
             return mnT;
         }
+        private string Checker(string metal, List<(string, string)> ready, Dictionary<string, int> availableMetals) //Возвращает металл который должна обрабатывать машина следующим после
+                                                                                                                    //основного либо "None", если таковых нет
+        {
+            var remainingMetals = (from m in Metals                                 //оставшиеся варианты металлов для обработки
+                                   where m.Key != metal
+                                   select m).ToList();
+
+            var nextMetal = (from rm in remainingMetals                             //металл с меньшим временем обратки из оставшихся
+                             where rm.Value == remainingMetals.Min(m => m.Value)
+                             select rm.Key).FirstOrDefault();
+
+            if (availableMetals[nextMetal] == 0 && nextMetal.Length > 1)            //проверка наличия металла в доступных
+                nextMetal = (from rm in remainingMetals
+                             where rm.Key != nextMetal
+                             select rm.Key).FirstOrDefault();
+
+            if (nextMetal != null && availableMetals[nextMetal] == 0)
+                return "None";
+            else if (nextMetal != null)
+                return nextMetal;
+            else
+                return "None";
+        }
+        #endregion
     }
 }
