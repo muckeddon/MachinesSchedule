@@ -10,6 +10,7 @@ namespace MachinesSchedule.Models.DataAccessLayer
         public DbSet<Nomenclature> Nomenclature { get; set; }
         public DbSet<Shipment> Shipment { get; set; }
         public DbSet<Time> Time { get; set; }
+        public DbSet<Schedule> Schedule { get; set; }
         #endregion
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
             : base(options)

@@ -1,5 +1,4 @@
-﻿
-namespace MachinesSchedule.Models.Entities
+﻿namespace MachinesSchedule.Models.Entities
 {
     public class Nomenclature
     {

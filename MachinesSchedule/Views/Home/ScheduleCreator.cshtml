@@ -1,1 +1,39 @@
-﻿<p>A</p>
+﻿@model List<Dictionary<string, object>>
+<style type="text/css">
+    TABLE {
+        border: 2px
+    }
+
+    TD, TH {
+        min-width: 150px;
+        padding: 3px;
+        border: 1px solid black;
+    }
+</style>
+@if (Model != null)
+{
+    <table>
+        <tr align="center">
+            <td>Печь 1</td>
+            <td>Печь 1 - Время</td>
+            <td>Печь 2</td>
+            <td>Печь 2 - Время</td>
+            <td>Печь 3</td>
+            <td>Печь 3 - Время</td>
+        </tr>
+        @foreach (var m in Model)
+        {
+            <tr align="center">
+                <td>@m["Печь 1"]</td>
+                <td>@m["Время для Печи 1"]</td>
+                <td>@m["Печь 2"]</td>
+                <td>@m["Время для Печи 2"]</td>
+                <td>@m["Печь 3"]</td>
+                <td>@m["Время для Печи 3"]</td>
+            </tr>
+        }
+    </table>
+    <form method="post" asp-controller="Home" asp-action="ExportToExcel">
+        <input type="submit" value="Скачать Excel" />
+    </form>
+}
